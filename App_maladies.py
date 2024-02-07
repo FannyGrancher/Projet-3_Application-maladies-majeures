@@ -84,41 +84,34 @@ def onglet1():
         liste_features = ['radius_mean', 'texture_mean', 'smoothness_mean', 'compactness_mean','concavity_mean', 'concave points_mean', 'symmetry_mean', 'fractal_dimension_mean']
         uploaded_file = st.file_uploader("Choisissez un fichier au format .csv : ")
         if uploaded_file is not None:
-            try : 
-                dataframe = pd.read_csv(uploaded_file)
-                try : 
-                    df = dataframe[liste_features]
-                    st.write('Vérifiez les données chargées : ')
-                    st.write(df)
-                    if st.button('Soumettre', key = 'soumettre_auto'):
-                        #Scalage des données et prédictions :
-                        scaler_sein = load("data_scaler.skops", trusted=True)
-                        algo_sein = load("data_algo.skops", trusted=True)
-                        scalage_auto = scaler_sein.transform(df)
-                        results_auto = algo_sein.predict(scalage_auto)
+            dataframe = pd.read_csv(uploaded_file)
+            df = dataframe[liste_features]
+            st.write('Vérifiez les données chargées : ')
+            st.write(df)
+            if st.button('Soumettre', key = 'soumettre_auto'):
+                #Scalage des données et prédictions :
+                scaler_sein = load("data_scaler.skops", trusted=True)
+                algo_sein = load("data_algo.skops", trusted=True)
+                scalage_auto = scaler_sein.transform(df)
+                results_auto = algo_sein.predict(scalage_auto)
                         
-                        st.markdown("<h1 style='text-align: center; color: #227DA7;'>Résultats de l'analyse</h1>", unsafe_allow_html=True)
-                        if len(results_auto) == 1 : 
-                            for final in results_auto:
-                                if final == 1:
-                                    st.markdown("<h6 style='text-align: left; color: #012D47;'>Selon vos données renseignées, notre analyse indique que les cellules sont probablement des cellules malignes.</h6>", unsafe_allow_html=True)
-                                    st.markdown("<h6 style='text-align: left; color: #012D47;'>Cette analyse ne se substitue pas à un avis médical.</h6>", unsafe_allow_html=True)
-                                    st.markdown("<h6 style='text-align: left; color: #012D47;'>Si vous n'êtes pas médecin, Nous vous conseillons de vous rapprocher de votre spécialiste</h6>", unsafe_allow_html=True)
-                                else:
-                                    st.markdown("<h6 style='text-align: left; color: #012D47;'>Selon vos données renseignées, notre analyse indique que les cellules sont probablement des cellules bénignes.</h6>", unsafe_allow_html=True)
-                                    st.markdown("<h6 style='text-align: left; color: #012D47;'>Cette analyse ne se substitue pas à un avis médical.</h6>", unsafe_allow_html=True)
-                                    st.markdown("<h6 style='text-align: left; color: #012D47;'>Si vous n'êtes pas médecin, Nous vous conseillons de vous rapprocher de votre spécialiste</h6>", unsafe_allow_html=True)
-                        else : 
-                            df.insert(0, 'Résultats', results_auto)
-                            df['Résultats'] = df['Résultats'].replace(0, 'Cellules potentiellement bénignes').replace(1, 'Cellules potentiellement malignes')
-                            st.write(df)
+                st.markdown("<h1 style='text-align: center; color: #227DA7;'>Résultats de l'analyse</h1>", unsafe_allow_html=True)
+                if len(results_auto) == 1 : 
+                    for final in results_auto:
+                        if final == 1:
+                            st.markdown("<h6 style='text-align: left; color: #012D47;'>Selon vos données renseignées, notre analyse indique que les cellules sont probablement des cellules malignes.</h6>", unsafe_allow_html=True)
                             st.markdown("<h6 style='text-align: left; color: #012D47;'>Cette analyse ne se substitue pas à un avis médical.</h6>", unsafe_allow_html=True)
                             st.markdown("<h6 style='text-align: left; color: #012D47;'>Si vous n'êtes pas médecin, Nous vous conseillons de vous rapprocher de votre spécialiste</h6>", unsafe_allow_html=True)
-                except : 
-                    st.write('Les données contenues dans le fichiers ne sont pas reconnues, merci de renseigner les champs ci-dessous : ')
-            except : 
-                st.write("Un problème a été rencontré lors du téléchargement du fichier ou le fichier n'est pas un CSV.")
-                st.write("Veuillez réessayer ou remplissez les champs ci-dessous :")
+                        else:
+                            st.markdown("<h6 style='text-align: left; color: #012D47;'>Selon vos données renseignées, notre analyse indique que les cellules sont probablement des cellules bénignes.</h6>", unsafe_allow_html=True)
+                            st.markdown("<h6 style='text-align: left; color: #012D47;'>Cette analyse ne se substitue pas à un avis médical.</h6>", unsafe_allow_html=True)
+                            st.markdown("<h6 style='text-align: left; color: #012D47;'>Si vous n'êtes pas médecin, Nous vous conseillons de vous rapprocher de votre spécialiste</h6>", unsafe_allow_html=True)
+                else : 
+                    df.insert(0, 'Résultats', results_auto)
+                    df['Résultats'] = df['Résultats'].replace(0, 'Cellules potentiellement bénignes').replace(1, 'Cellules potentiellement malignes')
+                    st.write(df)
+                    st.markdown("<h6 style='text-align: left; color: #012D47;'>Cette analyse ne se substitue pas à un avis médical.</h6>", unsafe_allow_html=True)
+                    st.markdown("<h6 style='text-align: left; color: #012D47;'>Si vous n'êtes pas médecin, Nous vous conseillons de vous rapprocher de votre spécialiste</h6>", unsafe_allow_html=True)
 
     Manu = st.toggle('Renseigner les champs')
 
